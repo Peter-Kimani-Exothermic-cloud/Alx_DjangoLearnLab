@@ -4,7 +4,8 @@ from . import views
 from .views import (
     PostListView, PostDetailView,
     PostCreateView, PostUpdateView,
-    PostDeleteView
+    PostDeleteView, CommentDeleteView, CommentUpdateView,
+    PostDetailView
 )
 
 urlpatterns = [
@@ -19,5 +20,13 @@ urlpatterns = [
     path('post/new/', PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post-delete'),
+
+    #Comment Urls
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+    
+    # New URLs for comment CRUD
+    # We use the comment's primary key (pk) to identify which comment to edit/delete
+    path('comment/<int:pk>/edit/', CommentUpdateView.as_view(), name='comment_edit'),
+    path('comment/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment_delete'),
 
 ]

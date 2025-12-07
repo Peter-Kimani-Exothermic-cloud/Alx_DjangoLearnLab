@@ -1,7 +1,9 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
-from .models import Post
+from .models import Post,Comment
+
+
 
 # Custom Registration Form to include email
 class CustomUserCreationForm(UserCreationForm):
@@ -43,4 +45,18 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'content', 'author']
+
+#Comment Form
+class CommentForm(forms.ModelForm):
+    """
+    A ModelForm for creating and updating Comment instances.
+    It automatically handles validation based on the Comment model fields.
+    """
+    class Meta:
+        model = Comment
+        fields = ['content',]
+
+
+
+
 
