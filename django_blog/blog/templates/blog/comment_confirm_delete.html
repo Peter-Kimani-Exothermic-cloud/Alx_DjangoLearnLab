@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Comment{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Confirm Deletion</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Are you sure you want to delete your comment?</p>
+                    
+                    <blockquote class="blockquote bg-light p-3 border-left border-danger">
+                        <p class="mb-0">"{{ comment.content|truncatechars:100 }}"</p>
+                        <footer class="blockquote-footer">Posted by {{ comment.author.username }}</footer>
+                    </blockquote>
+                    
+                    <p class="text-danger">This action cannot be undone.</p>
+                    
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                            <a href="{% url 'post_detail' pk=comment.post.pk %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

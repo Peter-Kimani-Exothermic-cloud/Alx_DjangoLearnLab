@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Comment{% endblock title %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Edit Your Comment</h3>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">You are editing a comment on the post: <strong>{{ comment.post.title }}</strong></p>
+                    <hr>
+                    <form method="POST">
+                        {% csrf_token %}
+                        
+                        {{ form.as_p }}
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="submit" class="btn btn-success">Save Changes</button>
+                            <a href="{% url 'post_detail' pk=comment.post.pk %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

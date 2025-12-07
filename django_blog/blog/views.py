@@ -174,7 +174,7 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 # --- Delete Comment (Delete) ---
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Comment
-    template_name = 'blog/comment_confirm_delete.html' # Create this template in Step 4
+    template_name = 'blog/comment_confirm_delete.html' 
     context_object_name = 'comment'
 
     def get_success_url(self):
