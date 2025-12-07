@@ -1,0 +1,6 @@
+<h2> Register </h2>
+<form method="post">
+    {% csrf_token %}       <!--Security measure to avoid attacks-->
+    {{ form.as_p }}        <!--Renders the form fields as paragraphs -->
+    <button type="submit"> Sign Up </button>
+</form>
