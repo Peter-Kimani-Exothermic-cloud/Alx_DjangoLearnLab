@@ -8,11 +8,16 @@ from .views import (
     PostDetailView
 )
 
+from .views import search_posts
+from .views import TagPostListView
+
 urlpatterns = [
     path('register/', views.register, name='register' ),
     path('login/', auth_views.LoginView.as_view(template_name='blog/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('search/', search_posts, name='search_results'),
+    path('tag/<slug:tag_slug>/', TagPostListView.as_view(), name='post_by_tag'),
     
     #CRUD Views Urls
     path('', PostListView.as_view(), name='post-list'),

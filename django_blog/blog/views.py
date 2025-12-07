@@ -17,6 +17,8 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseForbidden
+from .models import Post
+from taggit.models import Tag
 
 
 #LIST VIEW - Show all posts
@@ -185,3 +187,54 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         # UserPassesTestMixin method: check if the user is the author
         comment = self.get_object()
         return self.request.user == comment.author
+    
+
+# blog/views.py
+from django.db.models import Q # <-- New Import
+
+def search_posts(request):
+    query = request.GET.get('q') # Get the search term from the URL query parameter 'q'
+    
+    if query:
+        # Use Q objects to perform a case-insensitive search across title and content
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query)
+        ).distinct().order_by('-created_at')
+    else:
+        results = Post.objects.none() # Return an empty queryset if no query is provided
+
+    context = {
+        'query': query,
+        'posts': results,
+        'results_count': results.count()
+    }
+    return render(request, 'blog/search_results.html', context)
+
+
+
+# View to list posts filtered by a specific tag
+class TagPostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html' # Reuse the main post list template
+    context_object_name = 'posts'
+    paginate_by = 10 # Optional
+
+    def get_queryset(self):
+        # The URL captures the tag name (slug)
+        tag_slug = self.kwargs.get('tag_slug')
+        
+        # Filter posts that have the specified tag
+        if tag_slug:
+            # taggit provides a handy filter method
+            tag = get_object_or_404(Tag, slug=tag_slug) 
+            return Post.objects.filter(tags__in=[tag]).order_by('-created_at')
+        
+        # Fallback to all posts if no tag is provided (though usually handled by PostListView)
+        return Post.objects.all().order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tag_slug = self.kwargs.get('tag_slug')
+        if tag_slug:
+            context['current_tag'] = Tag.objects.get(slug=tag_slug)
+        return context
