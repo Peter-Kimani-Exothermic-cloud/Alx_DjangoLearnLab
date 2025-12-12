@@ -12,3 +12,4 @@ class Book(models.Model):
     title = models.CharField(255)
     publication_year = models.IntegerField()
     author = models.ForeignKey(Author, related_name='books', on_delete=models.CASCADE)
+
